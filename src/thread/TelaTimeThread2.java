@@ -16,7 +16,7 @@ public class TelaTimeThread2 extends JDialog {
     private JLabel descricaoHora2 = new JLabel("Email");
     private JTextField mostraTempo2 = new JTextField();
 
-    private JButton jButton = new JButton("Gerar lote");
+    private JButton jButton = new JButton("Gerar");
     private JButton jButton2 = new JButton("Stop");
 
     private ImplementacaoFilaThread fila = new ImplementacaoFilaThread();
@@ -65,16 +65,26 @@ public class TelaTimeThread2 extends JDialog {
             jButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    ObjetoFilaThread filaThread = new ObjetoFilaThread();
-                    filaThread.setNome(mostraTempo.getText());
-                    filaThread.setEmail(mostraTempo2.getText());
-                    fila.add(filaThread);
+
+                    if(fila == null){
+                        fila = new ImplementacaoFilaThread();
+                        fila.start();
+                    }
+
+                    for(int qtd=0; qtd<100; qtd++) {/*Simulando 100 envios em massa*/
+
+                        ObjetoFilaThread filaThread = new ObjetoFilaThread();
+                        filaThread.setNome(mostraTempo.getText());
+                        filaThread.setEmail(mostraTempo2.getText()+" - "+qtd);
+                        fila.add(filaThread);
+                    }
                 }
             });
             jButton2.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-
+                    fila.stop();
+                    fila = null;
                 }
             });
 
