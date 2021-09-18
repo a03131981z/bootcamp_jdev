@@ -13,33 +13,38 @@ public class ImplementacaoFilaThread extends Thread{
 
     @Override
     public void run(){
-        Iterator iteracao = pilhaFila.iterator();
+        System.out.println("Fila rodando");
 
-        synchronized(iteracao) {/*Boquear o acesso a esta lista por outro processo*/
-            while (iteracao.hasNext()) {/*Enquanto conter dados na lista irá processar*/
-                ObjetoFilaThread processar = (ObjetoFilaThread) iteracao.next();/*Pega o objeto atual*/
+        while(true) {
 
-                /*Processar 10 mil notas fiscais*/
-                /*gerar uma lista enorme de PDF*/
-                /*Gerar um envio em massa de email*/
-                System.out.println("\n-------------------------------------------------------------------------------------------------------------\n");
-                System.out.println(processar.getEmail());
-                System.out.println(processar.getNome());
+            synchronized (pilhaFila) {/*Boquear o acesso a esta lista por outro processo*/
+                Iterator iteracao = pilhaFila.iterator();
 
-                iteracao.remove();
+                while (iteracao.hasNext()) {/*Enquanto conter dados na lista irá processar*/
+                    ObjetoFilaThread processar = (ObjetoFilaThread) iteracao.next();/*Pega o objeto atual*/
 
-                try {
-                    Thread.sleep(1000);/*Dar um tempo para descarga de memória*/
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    /*Processar 10 mil notas fiscais*/
+                    /*gerar uma lista enorme de PDF*/
+                    /*Gerar um envio em massa de email*/
+                    System.out.println("\n-------------------------------------------------------------------------------------------------------------\n");
+                    System.out.println(processar.getEmail());
+                    System.out.println(processar.getNome());
+
+                    iteracao.remove();
+
+                    try {
+                        Thread.sleep(1000);/*Dar um tempo para descarga de memória*/
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
 
-        try {
-            Thread.sleep(1000);
-        }catch(InterruptedException e){
-            e.printStackTrace();
+            try {
+                Thread.sleep(1000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
         }
     }
 }
